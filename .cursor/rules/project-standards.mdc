@@ -1,0 +1,98 @@
+---
+description: MeoDrive project overzicht - opdracht, tech stack, architectuur en codestijl
+alwaysApply: true
+---
+
+# MeoDrive — Veilig Bestandsdelingsplatform
+
+## Opdracht
+
+Een veilig bestandsdelingsplatform voor MEO (werkervaringsplek van Thomas), gebouwd in
+pure PHP zonder frameworks, lokaal draaiend op XAMPP. Twee flows:
+
+- **Klant → MEO**: klant uploadt, MEO ontvangt.
+- **MEO-medewerker → klant**: medewerker uploadt, klant ontvangt.
+
+Kernvereisten:
+
+- Bestanden buiten de webroot (`private/`), AES-256-CBC versleuteld.
+- Uploader-verificatie via een 6-cijferige e-mailcode vóór de downloadlink actief wordt.
+- Downloadlink verloopt na 24 uur (opgeruimd via een cronjob).
+- Bestand wordt **direct fysiek verwijderd** na precies één download ("download-and-destroy").
+
+## Tech stack
+
+- PHP 8.1+, puur (geen frameworks/ORM), `declare(strict_types=1)` in elk bestand.
+- MySQL/MariaDB via PDO (alleen prepared statements, `PDO::ERRMODE_EXCEPTION`).
+- PHPMailer (via Composer) + Mailtrap SMTP voor lokaal testen.
+- Vanilla JavaScript (geen framework) voor frontend-interactie.
+- Plain CSS met custom properties (`:root { --meo-* }` in `css/index.css`), Google Fonts
+  Outfit (koppen/UI) + Ubuntu (paragraaftekst).
+- XAMPP lokale dev-omgeving; `public_html/` is de webroot, `private/` staat erbuiten.
+
+## Architectuur / belangrijkste keuzes
+
+- **UUID v4** als primary key (`uploads.id`), geen auto-increment — voorkomt dat iemand
+  simpelweg id's kan aflopen (enumeratie) om bij andermans bestanden te komen.
+- **Zero-knowledge-achtig**: de encryptiesleutel staat alleen in de downloadlink (`?key=`).
+  Nuance: de sleutel wordt tijdelijk in `uploads.encryption_key` gezet tussen upload en
+  verificatie, en pas naar `NULL` gezet door `verify.php` zodra de downloadmail met de
+  sleutel succesvol is verstuurd. Het IV is niet geheim en staat permanent in
+  `uploads.encryption_iv`.
+- **Flow**: `index.php` (rol kiezen) → `upload.php` (valideren, encrypten, opslaan,
+  verificatiemail) → `verify.php` (6-cijferige code, stuurt downloadmail naar ontvanger) →
+  `receive.php` (landingspagina, toont bestandsinfo zonder te downloaden) →
+  `download.php` (decrypt + stream + download-and-destroy: `unlink()` + `DELETE`).
+- **Multi-file upload** (max 3 bestanden per keer): de frontend telt bestanden bij nieuwe
+  selecties/drops op (vervangt niet) via een eigen `selectedFiles`-array in `js/index.js`,
+  met een harde limiet en een duidelijke foutmelding zodra die overschreden wordt (nooit
+  een stille, deels-toegevoegde selectie). De backend (`upload.php`) zipt >1 bestand
+  automatisch tot één archief (`MeoDrive_[datum-tijd].zip`) en behandelt dat archief
+  daarna als "1 bestand" door de rest van de pipeline — encryptie, opslag en
+  download-and-destroy blijven daardoor ongewijzigd.
+- **Opschoning**: `private/cron.php` verwijdert verlopen uploads (bestand + DB-rij);
+  handmatig via CLI/browser of via een echte cronjob aan te roepen.
+- **Gedeelde rendering**: `private/render_helpers.php` (`renderStatusPage()`,
+  `renderStatusLinks()`) voor alle statuspagina's — nooit losse HTML-boilerplate
+  dupliceren in losse scripts.
+- **Mail-styling**: `private/MailService.php` (`wrapTemplate()`) gebruikt dezelfde
+  kleuren, fonts en knopvorm als de website, voor visuele consistentie tussen mails en
+  pagina's.
+
+## Merknaam
+
+Het platform heet **"MeoDrive"** in alle gebruikersgerichte teksten (paginatitels,
+e-mails, foutmeldingen, README). Verwijzingen naar de organisatie "MEO" zelf (bijv.
+`thomas@wijzijnmeo.nl`, "Ik ben een medewerker") blijven ongewijzigd — alleen de
+productnaam is hernoemd, niet de organisatienaam.
+
+## Codestijl
+
+- Alles in het **Nederlands**: UI-teksten, foutmeldingen, codecommentaar, uitleg.
+- `declare(strict_types=1);` bovenaan elk PHP-bestand.
+- Fouten afhandelen met try/catch + duidelijke Nederlandse foutmeldingen via `abort()`
+  (in `upload.php`) of `renderStatusPage()` (overige pagina's) — nooit een witte pagina
+  of ruwe stacktrace richting de gebruiker.
+- Comments leggen de *waarom* uit (aannames, workarounds, beveiligingsoverwegingen), niet
+  wat de code letterlijk doet.
+- `private/credentials.php` NOOIT committen (staat in `.gitignore`);
+  `private/credentials.example.php` is het sjabloon met neutrale placeholders.
+- PDO altijd met prepared statements en named parameters, nooit stringconcatenatie in SQL.
+- Kleine, losse helperfuncties boven grote monolithische scripts.
+
+## Belangrijke bestanden
+
+| Bestand | Rol |
+|---|---|
+| `public_html/index.php` | Homepage: rolkeuze + upload-formulieren |
+| `public_html/upload.php` | Verwerkt upload, (zip +) encryptie, DB-insert, verificatiemail |
+| `public_html/verify.php` | Controleert 6-cijferige code, stuurt downloadmail |
+| `public_html/receive.php` | Landingspagina vóór download |
+| `public_html/download.php` | Decrypt + stream + download-and-destroy |
+| `public_html/js/index.js` | Multi-file dropzone-logica (frontend) |
+| `public_html/css/index.css` | Alle styling (CSS-variabelen `--meo-*`) |
+| `private/config.php` | PDO-connectie |
+| `private/credentials.php` | Geheime config (NOOIT committen) |
+| `private/MailService.php` | PHPMailer-wrapper + mailtemplates |
+| `private/render_helpers.php` | Gedeelde HTML-statuspagina-helpers |
+| `private/cron.php` | Opschoon-cronjob voor verlopen uploads |

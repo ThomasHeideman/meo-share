@@ -1,0 +1,7 @@
+private/credentials.php
+private/mails/*.html
+private/logs/*.log
+.env
+/vendor/
+/tools/phpunit.phar
+/.phpunit.cache/

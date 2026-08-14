@@ -1,0 +1,21 @@
+{
+    "name": "meo/share",
+    "description": "MEO veilig bestandsdelingsplatform",
+    "require": {
+        "php": ">=8.1",
+        "phpmailer/phpmailer": "^6.9"
+    },
+    "autoload": {
+        "files": [
+            "private/validation_helpers.php",
+            "private/rate_limit_helpers.php",
+            "private/Csrf.php",
+            "private/Logger.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MeoDrive\\Tests\\": "tests/"
+        }
+    }
+}

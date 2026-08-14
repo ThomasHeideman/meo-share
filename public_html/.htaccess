@@ -1,0 +1,13 @@
+# Security headers voor alle pagina's in public_html/.
+#
+# Waarom een vrij strikte CSP kan: alle pagina's laden alleen eigen CSS/JS
+# (css/index.css, js/*.js) en Google Fonts (fonts.googleapis.com/gstatic.com).
+# Er staan geen inline <script>- of style=""-attributen in de PHP-pagina's
+# (die staan alleen in de e-mailtemplates, die hier niet onder vallen).
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "DENY"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+    Header always set Content-Security-Policy "default-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; script-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'"
+</IfModule>

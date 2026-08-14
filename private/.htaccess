@@ -1,0 +1,2 @@
+# Voorkom directe toegang tot opgeslagen bestanden via de browser.
+Require all denied

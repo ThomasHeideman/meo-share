@@ -1,0 +1,589 @@
+:root {
+    --meo-navy: #12283f;
+    --meo-navy-hover: #1a3552;
+    --meo-blue: #2fa8e0;
+    --meo-blue-light: #eaf6fd;
+    --meo-blue-dashed: #9ed8f2;
+    --meo-border: #dbe2e7;
+    --meo-text: #0e2132;
+    --meo-text-muted: #5b6b78;
+    --meo-cta-blue: #2fa6da;
+    --meo-cta-blue-hover: #45bdec;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Outfit", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    color: var(--meo-text);
+}
+
+p {
+    font-family: "Ubuntu", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1.5rem;
+}
+
+.logo-img {
+    display: block;
+    width: auto;
+    user-select: none;
+}
+
+/* ---- State machine ---- */
+.state {
+    display: none;
+    width: 100%;
+}
+
+.state.is-active {
+    display: flex;
+    justify-content: center;
+    animation: fade-in 0.2s ease;
+}
+
+@keyframes fade-in {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---- Step 1: keuzescherm (logo links, kaarten rechts) ---- */
+.choice-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.25rem;
+    width: 100%;
+}
+
+.choice-layout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3.5rem;
+    width: 100%;
+    max-width: 58rem;
+    flex-wrap: wrap;
+}
+
+.choice-tagline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    max-width: 58rem;
+    margin: 0;
+    text-align: center;
+    color: var(--meo-text-muted);
+    font-family: "Outfit", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.choice-tagline-icon {
+    flex-shrink: 0;
+    color: var(--meo-blue);
+}
+
+.choice-logo {
+    flex: 1 1 16rem;
+    display: flex;
+    justify-content: center;
+}
+
+.choice-logo .logo-img {
+    height: auto;
+    width: 80%;
+}
+
+.role-cards {
+    flex: 1 1 20rem;
+    max-width: 24rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.role-card {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 7.5rem;
+    background: var(--meo-navy);
+    border: none;
+    border-radius: 1.1rem;
+    padding: 8.75rem 2rem 2.75rem;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    font-weight: 800;
+    font-size: 1.4rem;
+    line-height: 1.3;
+    color: #fff;
+    transition: background-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+}
+
+button.role-card:after {
+    content: '.';
+    color: #2daae1;
+}
+
+.role-card:hover {
+    background: var(--meo-navy-hover);
+    box-shadow: 0 10px 24px rgba(18, 40, 63, 0.22);
+}
+
+.role-card:active {
+    transform: scale(0.99);
+}
+
+.role-card:focus-visible {
+    outline: 3px solid var(--meo-blue);
+    outline-offset: 2px;
+}
+
+@media (max-width: 34rem) {
+    .role-cards {
+        max-width: 100%;
+    }
+}
+
+/* ---- Step 2: vervolgscherm (logo gecentreerd, smal formulier) ---- */
+.form-layout {
+    width: 100%;
+    max-width: 22rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    align-self: flex-start;
+    background: none;
+    border: none;
+    color: var(--meo-text-muted);
+    font: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 1rem;
+}
+
+.back-link:hover {
+    color: var(--meo-text);
+}
+
+.form-layout .logo-img {
+    height: auto;
+    margin: 0 auto 2rem;
+    width: 80%;
+}
+
+.upload-form .field {
+    margin-bottom: 1.25rem;
+}
+
+.upload-form label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--meo-text);
+    margin-bottom: 0.35rem;
+}
+
+.upload-form label.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+}
+
+.upload-form input[type="email"] {
+    width: 100%;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--meo-border);
+    border-radius: 0.35rem;
+    font-size: 0.95rem;
+    font-family: inherit;
+    color: var(--meo-text);
+}
+
+.upload-form input[type="email"]:focus {
+    outline: none;
+    border-color: var(--meo-blue);
+    box-shadow: 0 0 0 3px var(--meo-blue-light);
+}
+
+.file-drop {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    height: 250px;
+    border: 2px dashed var(--meo-blue-dashed);
+    border-radius: 0.75rem;
+    background: var(--meo-blue-light);
+    padding: 2rem 1rem;
+    text-align: center;
+    cursor: pointer;    
+    transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.file-drop.is-dragover,
+.file-drop.has-file {
+    border-color: var(--meo-blue);
+    background: #dcf0fb;
+}
+
+.file-drop.is-max {
+    cursor: default;
+}
+
+.file-drop input[type="file"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    overflow: hidden;
+}
+
+.file-drop-text {
+    margin: 0;
+    color: var(--meo-text);
+    line-height: 1.6;
+    word-break: break-word;
+}
+.file-drop-file-list {
+    display: inline-block;
+    margin: 0.35rem 0 0;
+    padding-left: 1.25rem;
+    text-align: left;
+    list-style: disc;
+}
+
+.file-drop-file-list li {
+    word-break: break-word;
+}
+
+.file-drop-text--small {    
+    bottom: 1rem;
+    font-size: 0.9rem;
+    color: var(--meo-text-muted);
+    text-align: center;
+}
+
+.file-drop-link {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    font-size: inherit;
+    color: var(--meo-blue);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.file-drop-warning {
+    margin: 0.6rem 0 0;
+    padding: 0.6rem 0.75rem;
+    border-radius: 0.5rem;
+    background: #fdf3e3;
+    border: 1px solid #f0d59e;
+    color: #7a5a12;
+    font-size: 0.85rem;
+    text-align: left;
+}
+
+.file-drop-warning[hidden] {
+    display: none;
+}
+
+.upload-progress {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0.75rem 0 0.25rem;
+}
+
+.upload-progress[hidden] {
+    display: none;
+}
+
+.upload-progress-track {
+    flex: 1;
+    height: 0.6rem;
+    border-radius: 999px;
+    background: var(--meo-blue-light);
+    border: 1px solid var(--meo-blue-dashed);
+    overflow: hidden;
+}
+
+.upload-progress-bar {
+    height: 100%;
+    width: 0%;
+    background: var(--meo-blue);
+    border-radius: 999px;
+    transition: width 0.15s ease-out;
+}
+
+.upload-progress-label {
+    min-width: 3.2rem;
+    text-align: right;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--meo-text-muted);
+}
+
+.submit-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    height: 60px;
+    margin-top: 1.75rem;
+    padding: 0 30px;
+    border: none;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--meo-text);
+    font-family: inherit;
+    font-size: 17px;
+    font-weight: 700;
+    text-transform: uppercase;
+    white-space: nowrap;
+    cursor: pointer;
+    overflow: visible;
+    z-index: 0;
+}
+
+.submit-btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 60px;
+    height: 60px;
+    transform: translateY(-50%);
+    background: var(--meo-cta-blue);
+    border-radius: 999px;
+    transition: width 0.2s ease-in-out, background-color 0.2s ease;
+    z-index: -1;
+}
+
+.submit-btn:hover::after,
+.submit-btn:focus-visible::after {
+    width: 100%;
+    background: var(--meo-cta-blue-hover);
+}
+
+.submit-btn:focus-visible {
+    outline: none;
+}
+
+.submit-btn:focus-visible::after {
+    box-shadow: 0 0 0 3px rgba(47, 168, 224, 0.35);
+}
+
+.submit-btn {
+    text-decoration: none;
+}
+
+/* ---- Statuspagina's: upload-resultaat, verificatie, ontvangst, downloadfouten ---- */
+.status-layout {
+    width: 100%;
+    max-width: 26rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.status-layout .logo-img {
+    height: auto;
+    width: 60%;
+    margin: 0 auto 2rem;
+}
+
+.status-layout .submit-btn {
+    align-self: center;
+    margin: 0.5rem 0 1.5rem;
+}
+
+.submit-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+.submit-btn:disabled::after {
+    display: none;
+}
+
+.status-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--meo-text);
+    margin: 0 0 0.75rem;
+}
+
+.status-text {
+    font-size: 0.9rem;
+    color: var(--meo-text-muted);
+    line-height: 1.6;
+    margin: 0 0 1rem;
+}
+
+.status-message {
+    width: 100%;
+    padding: 0.9rem 1rem;
+    border-radius: 0.6rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin: 0 0 1.25rem;
+    text-align: left;
+}
+
+.status-message.is-success {
+    background: var(--meo-blue-light);
+    color: var(--meo-text);
+    border: 1px solid var(--meo-blue-dashed);
+}
+
+.status-message.is-error {
+    background: #fdecec;
+    color: #8a1f1f;
+    border: 1px solid #f3c1c1;
+}
+
+.info-card {
+    width: 100%;
+    background: var(--meo-blue-light);
+    border: 1px solid var(--meo-blue-dashed);
+    border-radius: 0.75rem;
+    padding: 1.25rem 1.5rem;
+    margin: 0.5rem 0 1.25rem;
+    text-align: left;
+}
+
+.info-card dt {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--meo-text-muted);
+    margin-top: 0.9rem;
+}
+
+.info-card dt:first-child {
+    margin-top: 0;
+}
+
+.info-card dd {
+    margin: 0.15rem 0 0;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--meo-text);
+    word-break: break-word;
+}
+
+.admin-subtitle {
+    font-size: 1.15rem;
+    margin-top: 2rem;
+}
+
+.admin-logout-form {
+    margin-top: 1.5rem;
+}
+
+.admin-log {
+    width: 100%;
+    max-height: 24rem;
+    overflow-y: auto;
+    background: var(--meo-blue-light);
+    border: 1px solid var(--meo-blue-dashed);
+    border-radius: 0.75rem;
+    padding: 1rem 1.25rem;
+    margin: 0.5rem 0 1.25rem;
+    text-align: left;
+    font-family: 'Ubuntu', monospace;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    color: var(--meo-text);
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.status-links {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    align-items: center;
+}
+
+.status-links a {
+    color: var(--meo-blue);
+    font-size: 0.85rem;
+    text-decoration: underline;
+}
+
+.status-links a:hover {
+    color: var(--meo-text);
+}
+
+.receive-card {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.verify-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.resend-form {
+    margin-top: 1rem;
+}
+
+.code-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--meo-border);
+    border-radius: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-align: center;
+    font-family: inherit;
+    color: var(--meo-text);
+    margin-bottom: 0.5rem;
+}
+
+.code-input:focus {
+    outline: none;
+    border-color: var(--meo-blue);
+    box-shadow: 0 0 0 3px var(--meo-blue-light);
+}
+
+
+/* css fixes  */
+form.verify-form label {
+    margin-bottom: 1rem;
+}
