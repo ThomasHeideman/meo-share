@@ -3,5 +3,6 @@ private/mails/*.html
 private/logs/*.log
 .env
 /vendor/
+/export/
 /tools/phpunit.phar
 /.phpunit.cache/

@@ -159,6 +159,8 @@ Dit script is niet bereikbaar via het web en kan uitsluitend worden aangeroepen 
 
 ## 5. Lokale Installatie en Configuratierichtlijnen
 
+Hieronder de lokale installatie in hoofdlijnen. Voor de volledige stap-voor-stap-uitleg — inclusief virtual host, SMTP-configuratie en een apart deel over het live zetten op een server — zie [`docs/installatie.md`](docs/installatie.md).
+
 1. Richt de virtual host van de webserver (bijvoorbeeld binnen XAMPP) zo in dat de document root exclusief naar de map `public_html/` verwijst.
 2. Importeer de database-architectuur in MySQL middels het meegeleverde SQL-schema (tabel `uploads`).
 3. Kopieer het bestand `private/credentials.example.php` naar `private/credentials.php` en configureer hierin de lokale database-credentials en de Mailtrap SMTP-instellingen.
@@ -190,6 +192,7 @@ Naast dit architectuuroverzicht is er uitgebreide documentatie beschikbaar in de
 
 | Document | Voor wie | Inhoud |
 | --- | --- | --- |
+| [`docs/installatie.md`](docs/installatie.md) | Iedereen die het project opzet of uitrolt | Deel A: lokale installatie op XAMPP. Deel B: live zetten op een server (HTTPS, echte mailserver, productie-PHP-instellingen, rechten, cronjob en een controlelijst). |
 | [`docs/gebruikershandleiding.md`](docs/gebruikershandleiding.md) | Klanten, MEO-medewerkers, ontvangers | Hoe je een bestand uploadt, verifieert, intrekt of ontvangt. |
 | [`docs/beheerdershandleiding.md`](docs/beheerdershandleiding.md) | Beheerders | Installatie, credentials-beheer, het admin-overzicht, de cronjob, logging en tests draaien. |
 | [`docs/beveiliging.md`](docs/beveiliging.md) | Beheerders, beoordelaars | Volledig overzicht van alle beveiligingsmaatregelen, inclusief bekende beperkingen. |
